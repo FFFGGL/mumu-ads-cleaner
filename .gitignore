@@ -1,0 +1,14 @@
+# 备份与产物
+MuMuBackup/
+*.zip
+*.db
+*.bak
+*.xml.bak
+
+# 系统与编辑器
+.DS_Store
+Thumbs.db
+*.log
+__pycache__/
+.vscode/
+.idea/
