@@ -87,6 +87,25 @@ powershell -ExecutionPolicy Bypass -File "...\scripts\clean_launcher_ads.ps1"
 设备端缺少 `/system/bin/sqlite3` 时，脚本自动改用 Python 在 Windows 侧改库再回传并修复权限
 （需要 `python` 在 PATH，或用 `-Python` 指定）。
 
+### 步骤 2.5：免 PowerShell 通道（受限环境首选）
+
+某些环境禁止调用 PowerShell（例如 WorkBuddy 沙箱会拦截 `powershell` 调用）。此时改用 Python 版：
+
+```bash
+python "...\scripts\clean_mumu.py" --install-dir "D:\Program Files\Netease\MuMu"
+python "...\scripts\clean_mumu.py" --install-dir ... --block-startup-ad --reboot
+```
+
+该脚本优先用模拟器自带的 `nx_main\mumu-cli.exe`（`sh -v 0 -c '<cmd>'` 自带 root，无需知道 ADB 端口、
+无需 `adb connect`），回退到 `nx_main\adb.exe`；并会在检测到 `/data/adb/ksud` 时直接
+`ksud module install` 完成模块持久化。
+
+**Git Bash 下执行 adb 的坑**：MSYS 会把 `/data/...` 这类参数转换成本机路径，导致
+`ls: F:/.../data/user/0/...: No such file`。执行前先 `export MSYS_NO_PATHCONV=1`。
+
+**无窗口启动时**：`mumu-cli control launch -v 0` 依赖主程序 `MuMuNxMain.exe` 在运行；
+若返回 errcode 0 但设备没起来，先启动 `nx_main\MuMuNxMain.exe` 再执行一次 launch。
+
 ### 步骤 3：验证
 
 - `pm list packages -d` 中出现 `com.mumu.store`（Full 模式）
