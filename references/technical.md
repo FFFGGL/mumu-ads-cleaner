@@ -20,6 +20,9 @@
 - 桌面数据库：`/data/data/app.lawnchair/databases/launcher_4_7_6_1.db`
   - Android 15 实测也可能是 `launcher_4_7_6.db`；统一用 `launcher*.db` 通配
   - 等价路径：`/data/user/0/app.lawnchair/databases/launcher*.db`
+  - **文件名会随桌面版本变化**（MuMu 6.8.10 / Android 15 实测实际库名为 `launcher_7_4_6.db`，
+    旧的 `launcher_4_7_6_1.db` 会被清空成 0 字节并废弃）。因此**一律用 `launcher*.db` 通配**，
+    并优先按 `ls /data/user/0/app.lawnchair/databases/` 的实际结果取文件名，不要写死。
 - `favorites` 表中的广告项：
 
 | _id | 内容 | 说明 |
